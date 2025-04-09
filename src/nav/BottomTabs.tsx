@@ -5,65 +5,58 @@ import HomeScreen from "../pages/HomeScreen";
 import BookingScreen from "../pages/BookingScreen";
 import LeaderBoard from "../pages/LeaderBoard";
 import IndexScreen from "../pages/IndexScreen";
-import ProfleScreen from "../pages/ProfileScreen";
+import ProfileScreen from "../pages/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
-
-// Placeholder Screens (Move to separate files if needed)
-const BookingsScreen = () => <BookingScreen />;
-const InboxScreen = () => <IndexScreen />;
-const ProfileScreen = () => <ProfleScreen />;
-const LeaderboardScreen = () => <LeaderBoard />;
 
 export default function BottomTabs() {
   return (
     <Tab.Navigator
+      initialRouteName="Home" // Set the default screen
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#FFFFFF", // Neutral white background
-          borderTopLeftRadius: 15, // Rounded corners
+          backgroundColor: "#000000",
+          borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
-          height: 65, // Adjusted height for better usability
+          height: 65,
           paddingBottom: 8,
           paddingTop: 8,
-          position: "absolute", // Floating effect
+          position: "absolute",
           marginHorizontal: 10,
-          elevation: 5, // Shadow for Android
-          shadowColor: "#000", // Shadow for iOS
+          elevation: 5,
+          shadowColor: "#000",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.2,
           shadowRadius: 4,
         },
-        tabBarActiveTintColor: "#007BFF", // Active icon color (blue)
-        tabBarInactiveTintColor: "#6C757D", // Inactive icon color (gray)
+        tabBarActiveTintColor: "#FFFFFF",
+        tabBarInactiveTintColor: "#CCCCCC",
         tabBarIcon: ({ color, size }) => {
           let iconName: string;
 
-          // Assign icons based on route name
           if (route.name === "Home") {
-            iconName = "home-outline"; // Home icon
+            iconName = "home-outline";
           } else if (route.name === "Bookings") {
-            iconName = "location-outline"; // Location icon for Bookings
-          } else if (route.name === "Inbox") {
-            iconName = "chatbubble-outline"; // Inbox icon
-          } else if (route.name === "Profile") {
-            iconName = "person-outline"; // Profile icon
+            iconName = "location-outline";
           } else if (route.name === "Leaderboard") {
-            iconName = "trophy-outline"; // Leaderboard icon
+            iconName = "trophy-outline";
+          } else if (route.name === "Inbox") {
+            iconName = "chatbubble-outline";
+          } else if (route.name === "Profile") {
+            iconName = "person-outline";
           } else {
-            iconName = "help-outline"; // Default icon for undefined routes
+            iconName = "help-outline"; // Default icon for unexpected cases
           }
 
-          // Return the Ionicons component
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Bookings" component={BookingsScreen} />
-      <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-      <Tab.Screen name="Inbox" component={InboxScreen} />
+      <Tab.Screen name="Bookings" component={BookingScreen} />
+      <Tab.Screen name="Leaderboard" component={LeaderBoard} />
+      <Tab.Screen name="Inbox" component={IndexScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

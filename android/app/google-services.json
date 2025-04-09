@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "224260340820",
+    "project_id": "shankar-b4e73",
+    "storage_bucket": "shankar-b4e73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224260340820:android:ee489eef1e7629e08b81c1",
+        "android_client_info": {
+          "package_name": "com.sportsconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224260340820-11tdkfvrhg8t5o0gfid0m3fqk5qaqj7i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaXsRFaJDyaWIsx86JQkfI65eWK7qoAtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224260340820-11tdkfvrhg8t5o0gfid0m3fqk5qaqj7i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

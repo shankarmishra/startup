@@ -107,38 +107,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#F4F6F8",
+    backgroundColor: "#000000", // Black background for dark theme
   },
   heading: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-    color: "#FF6A00",
+    color: "#FFFFFF", // White for heading
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
-    color: "#333",
+    color: "#FFFFFF", // White for section titles
   },
   card: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#333333", // Dark gray for card background
     borderRadius: 10,
     padding: 15,
     marginBottom: 12,
-    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   matchTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: "#FFFFFF", // White for match title
   },
   matchInfo: {
     fontSize: 14,
     marginTop: 4,
-    color: "#666",
+    color: "#CCCCCC", // Light gray for match info
   },
   matchStatus: {
     marginTop: 8,
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
   empty: {
     fontSize: 14,
     fontStyle: "italic",
-    color: "#999",
+    color: "#CCCCCC", // Light gray for empty state
     marginBottom: 10,
   },
 });

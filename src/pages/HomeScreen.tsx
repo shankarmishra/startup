@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,71 +6,118 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Image,
+  Dimensions,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
+
+const API_BASE_URL = "https://sportsbackend-n2xb.onrender.com/api/tournaments";
+
+// Define the type for a tournament
+type Tournament = {
+  _id: string;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+  banner: string;
+};
 
 const HomeScreen = () => {
+  const [tournaments, setTournaments] = useState<Tournament[]>([]); // Use the defined type
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTournaments = async () => {
+      try {
+        const response = await axios.get(API_BASE_URL);
+        setTournaments(response.data);
+      } catch (error) {
+        console.error("Error fetching tournaments:", error);
+        Alert.alert("Error", "Failed to load tournaments. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTournaments();
+  }, []);
+
   return (
     <LinearGradient
-      colors={["#FFFFFF", "#F5F5F5"]} // White to light gray gradient background
+      colors={["#000000", "#434343"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
     >
-      <ScrollView>
-        {/* Header */}
-        <Text style={styles.title}>Welcome Back, Player!</Text>
+      {/* Top Navigation Bar */}
+      <View style={styles.navBar}>
+        <Text style={styles.navTitle}>Home</Text>
+        <TouchableOpacity>
+          <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hero Banner */}
+        <View style={styles.heroBanner}>
+          <Image
+            source={require("../assets/image1.png")}
+            style={styles.heroImage}
+          />
+          <Text style={styles.heroText}>Welcome Back, Player!</Text>
+        </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
-            placeholder="Search for players or sports"
+            placeholder="Search for players or tournaments"
             placeholderTextColor="#999"
             style={styles.searchInput}
           />
           <TouchableOpacity style={styles.searchButton}>
-            <Text style={styles.searchButtonText}>🔍</Text>
+            <Ionicons name="search-outline" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
 
-        {/* Running Challenge Card */}
-        <View style={styles.challengeCard}>
-          <Text style={styles.cardTitle}>Running Challenge</Text>
-          <Text style={styles.cardSubtitle}>Distance: 15.5 km</Text>
-          <Text style={styles.cardSubtitle}>Calories: 150 kcal</Text>
-          <TouchableOpacity style={styles.cardButton}>
-            <Text style={styles.cardButtonText}>Go to</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Metrics Section */}
-        <View style={styles.metricsContainer}>
-          <View style={styles.metricCard}>
-            <Text style={styles.metricValue}>07:30</Text>
-            <Text style={styles.metricLabel}>Sleep</Text>
+        {/* Upcoming Tournaments Section */}
+        <Text style={styles.sectionTitle}>Upcoming Tournaments</Text>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#FFFFFF" style={styles.loader} />
+        ) : tournaments.length === 0 ? (
+          <Text style={styles.emptyText}>No tournaments available.</Text>
+        ) : (
+          <View style={styles.tournamentList}>
+            {tournaments.map((tournament) => (
+              <View key={tournament._id} style={styles.tournamentCard}>
+                <Image
+                  source={{ uri: tournament.banner }}
+                  style={styles.tournamentImage}
+                />
+                <View style={styles.tournamentDetails}>
+                  <Text style={styles.tournamentTitle}>{tournament.title}</Text>
+                  <Text style={styles.tournamentDate}>
+                    {new Date(tournament.date).toLocaleDateString()}
+                  </Text>
+                  <TouchableOpacity style={styles.tournamentButton}>
+                    <LinearGradient
+                      colors={["#000000", "#FFFFFF"]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.tournamentButtonGradient}
+                    >
+                      <Text style={styles.tournamentButtonText}>View Details</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
           </View>
-          <View style={styles.metricCard}>
-            <Text style={styles.metricValue}>150 ml</Text>
-            <Text style={styles.metricLabel}>Drink</Text>
-          </View>
-        </View>
-
-        {/* Sports Categories */}
-        <Text style={styles.sectionTitle}>Sports Categories</Text>
-        <View style={styles.sportsContainer}>
-          <TouchableOpacity style={styles.sportButton}>
-            <Text style={styles.sportButtonText}>Soccer</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.sportButton}>
-            <Text style={styles.sportButtonText}>Basketball</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.sportButton}>
-            <Text style={styles.sportButtonText}>Tennis</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.sportButton}>
-            <Text style={styles.sportButtonText}>Running</Text>
-          </TouchableOpacity>
-        </View>
+        )}
       </ScrollView>
     </LinearGradient>
   );
@@ -78,16 +125,43 @@ const HomeScreen = () => {
 
 export default HomeScreen;
 
+const { width } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontSize: 26,
+  navBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: "#000000",
+    borderBottomWidth: 1,
+    borderBottomColor: "#333333",
+  },
+  navTitle: {
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#1C1C1E", // Dark gray for text
-    textAlign: "center",
+    color: "#FFFFFF",
+  },
+  heroBanner: {
+    alignItems: "center",
     marginVertical: 20,
+  },
+  heroImage: {
+    width: width * 0.9,
+    height: 150,
+    resizeMode: "cover",
+    borderRadius: 15,
+  },
+  heroText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginTop: 10,
+    textAlign: "center",
   },
   searchContainer: {
     flexDirection: "row",
@@ -97,112 +171,77 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    backgroundColor: "#F5F5F5", // Light gray for input background
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 15,
     height: 50,
     borderRadius: 25,
-    color: "#1C1C1E", // Dark gray for input text
+    color: "#333333",
     fontSize: 16,
   },
   searchButton: {
     marginLeft: 10,
-    backgroundColor: "#1C1C1E", // Dark gray for button
+    backgroundColor: "#333333",
     width: 50,
     height: 50,
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
   },
-  searchButtonText: {
-    fontSize: 20,
-    color: "#FFFFFF", // White for button text
-  },
-  challengeCard: {
-    backgroundColor: "#FFFFFF", // White for card background
-    borderRadius: 15,
-    padding: 20,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1C1C1E", // Dark gray for card title
-    marginBottom: 10,
-  },
-  cardSubtitle: {
-    fontSize: 16,
-    color: "#666", // Medium gray for card subtitle
-    marginBottom: 5,
-  },
-  cardButton: {
-    backgroundColor: "#1C1C1E", // Dark gray for button
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignSelf: "flex-start",
-    marginTop: 10,
-  },
-  cardButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#FFFFFF", // White for button text
-  },
-  metricsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginHorizontal: 20,
-    marginBottom: 20,
-  },
-  metricCard: {
-    backgroundColor: "#F5F5F5", // Light gray for metric card
-    borderRadius: 15,
-    padding: 20,
-    alignItems: "center",
-    width: "45%",
-  },
-  metricValue: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1C1C1E", // Dark gray for metric value
-    marginBottom: 5,
-  },
-  metricLabel: {
-    fontSize: 16,
-    color: "#666", // Medium gray for metric label
-  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#1C1C1E", // Dark gray for section title
+    color: "#FFFFFF",
     marginHorizontal: 20,
     marginBottom: 10,
   },
-  sportsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    marginHorizontal: 20,
+  loader: {
+    marginTop: 20,
   },
-  sportButton: {
-    backgroundColor: "#FFFFFF", // White for sport button
-    padding: 15,
+  emptyText: {
+    fontSize: 16,
+    color: "#CCCCCC",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  tournamentList: {
+    paddingHorizontal: 20,
+  },
+  tournamentCard: {
+    backgroundColor: "#333333",
     borderRadius: 15,
     marginBottom: 15,
-    width: "40%",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    overflow: "hidden",
   },
-  sportButtonText: {
-    fontSize: 16,
+  tournamentImage: {
+    width: "100%",
+    height: 150,
+    resizeMode: "cover",
+  },
+  tournamentDetails: {
+    padding: 15,
+  },
+  tournamentTitle: {
+    fontSize: 18,
     fontWeight: "bold",
-    color: "#1C1C1E", // Dark gray for sport button text
+    color: "#FFFFFF",
+    marginBottom: 5,
+  },
+  tournamentDate: {
+    fontSize: 14,
+    color: "#CCCCCC",
+    marginBottom: 10,
+  },
+  tournamentButton: {
+    alignSelf: "flex-start",
+  },
+  tournamentButtonGradient: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  tournamentButtonText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#000000",
   },
 });
