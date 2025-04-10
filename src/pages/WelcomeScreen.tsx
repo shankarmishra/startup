@@ -24,7 +24,7 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
     >
       <View style={styles.content}>
         {/* Transparent background image */}
-        <Image source={require("../assets/images.png")} style={styles.image} />
+        <Image source={require("../assets/image.png")} style={styles.image} />
         <Text style={styles.title}>Player Finder</Text>
         <Text style={styles.subtitle}>
           Connect with local athletes and explore sports activities near you.

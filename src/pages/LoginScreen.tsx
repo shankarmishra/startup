@@ -186,8 +186,8 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         >
           {/* App Icon */}
           <View style={styles.appIconContainer}>
-            <Image source={require("../assets/app.png")} style={styles.appIcon} />
-            <Text style={styles.appName}>GameSathi</Text>
+            <Image source={require("../assets/logo.png")} style={styles.appIcon} />
+            <Text style={styles.appName}>TeamupIndia</Text>
           </View>
 
           <Text style={styles.title}>{isRegister ? "Register" : "Login"}</Text>
@@ -301,10 +301,6 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             <TouchableOpacity style={styles.socialButton} onPress={handleGoogleLogin}>
               <FontAwesome name="google" size={20} color="#DB4437" />
               <Text style={styles.socialText}>Google</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <FontAwesome name="facebook" size={20} color="#4267B2" />
-              <Text style={styles.socialText}>Facebook</Text>
             </TouchableOpacity>
           </View>
 
